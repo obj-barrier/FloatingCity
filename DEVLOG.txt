@@ -1,0 +1,33 @@
+2024.11.14
+    Aesthetic Goals: A top-down infiltration game.
+        1. Challenge: Players are constantly in danger situations, worried about being spotted, shot at, alarms and death.
+        2. Discovery: Players gradually realise they can do fancy moves with time manipulation, weapons and the environment.
+    Signs of Success:
+        1. Players can easily take down a single enemy, but struggle with multiple enemies.
+        2. There are certain strong enemies that have to be avoided.
+        3. Being spotted has serious consequences.
+        4. There are always multiple solutions to a problem.
+        5. Players gradually find enemy movement patterns and feel tempted to challenge harder levels.
+    Signs of Failure:
+        1. Players can kill multiple enemies at once without triggering the alarm.
+        2. Players can win easily even after triggering the alarm.
+        3. Players quickly learns all the techniques.
+    Core Loop:
+        Players enter a section, observe the enemies, make up a plan to the next section, bypassing or killing some of the enemies.
+        Players should spend most of the time pausing and thinking what to do next.
+
+    For homework 6 I will only make one level (section) as prototype.
+
+    Making the map: Multiple rooms connected with corridors form a section.
+        Used tilemap to layout the initial map with black ground and red walls.
+        Set up tilemap colliders for the walls.
+        Used NaveMeshPlus to build walkable area in the map.
+
+    Making an enemy: A red triangle that can go wherever I choose.
+        NavMeshAgent can make it move, but do not rotate it well in 2D.
+        Manually set rotation to face new position every frame.
+    
+    Decided to make 3 enemies as a group in one room. Periodically, random one of them is sent to patrol a random terminal.
+    Made a list of 3 terminals represented by orange triangles. They are placed in the middle of a wall of rooms.
+    By "patrol", it means an enemy start from the spawn room and go to the terminal, stay there for x seconds, and return.
+    If it returns successfully, it will report to the group for next round of patrolling.
