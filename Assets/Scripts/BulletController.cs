@@ -1,30 +1,35 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class BulletController : MonoBehaviour
 {
     public float speed;
-    public float lifetime;
-
-    private float time;
 
     private void Start()
     {
         GetComponent<Rigidbody2D>().velocity = transform.up * speed;
-        time = Time.time;
-    }
-
-    private void Update()
-    {
-        if (Time.time - time > lifetime)
-        {
-            Destroy(gameObject);
-        }
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
+        PlayerController player = collision.gameObject.GetComponent<PlayerController>();
+        EnemyController enemy = collision.gameObject.GetComponent<EnemyController>();
+        GoalController goal = collision.gameObject.GetComponent<GoalController>();
+        if (player != null)
+        {
+            player.Die();
+        }
+        else if (enemy != null)
+        {
+            enemy.Die();
+        }
+        else if (goal != null)
+        {
+            goal.Win();
+        }
+
         Destroy(gameObject);
     }
 }

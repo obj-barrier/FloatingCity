@@ -1,0 +1,3 @@
+Assets\sounds\Score.wav is from "Assets\VRTemplateAssets\Audio\Button_14_hover.wav" in Unity's VR core template.
+Other audio files come from an open-source game: https://endless-sky.github.io/
+Battle City Map tiles are from https://www.spriters-resource.com/nes/batcity/sheet/60016/

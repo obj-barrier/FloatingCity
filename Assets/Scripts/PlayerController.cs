@@ -9,6 +9,13 @@ public class PlayerController : MonoBehaviour
     public float accel;
     public float maxSpeed;
 
+    private ScoreKeeper scoreKeeper;
+
+    private void Start()
+    {
+        scoreKeeper = FindObjectOfType<ScoreKeeper>();
+    }
+
     private void Update()
     {
         if (Input.GetKey(KeyCode.Escape))
@@ -45,11 +52,11 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    private void OnCollisionEnter2D(Collision2D collision)
+    public void Die()
     {
-        if (collision.gameObject.GetComponent<BulletController>())
-        {
-            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
-        }
+        scoreKeeper.Lose();
+        GetComponent<AudioSource>().Play();
+        GetComponent<SpriteRenderer>().enabled = false;
+        GetComponentInChildren<WeaponController>().gameObject.SetActive(false);
     }
 }

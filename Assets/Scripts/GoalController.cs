@@ -4,12 +4,19 @@ using UnityEngine;
 
 public class GoalController : MonoBehaviour
 {
-    private void OnCollisionEnter2D(Collision2D collision)
+    public int score;
+
+    private ScoreKeeper scoreKeeper;
+
+    private void Start()
     {
-        if (collision.gameObject.GetComponent<BulletController>())
-        {
-            Time.timeScale = 0f;
-            Destroy(gameObject);
-        }
+        scoreKeeper = FindObjectOfType<ScoreKeeper>();
+    }
+
+    public void Win()
+    {
+        scoreKeeper.UpdateScore(score);
+        scoreKeeper.Win();
+        Destroy(gameObject);
     }
 }

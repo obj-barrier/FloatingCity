@@ -1,0 +1,42 @@
+What all the objects on screen are:
+    Green circle: the player (you)
+    Red bricks: walls
+    White bricks: locked gates
+    Red triangles: enemies
+    Blue diamond: the goal
+    Tiny yellow circles: bullets
+    Orange triangles: terminals for enemies to work at
+
+What their behavior is supposed to be:
+    There are 3 enemies in a room, they will periodically send one of them out to patrol and work at a terminal.
+    A patrolling enemy will move to the terminal, stay for a while, return and send the next patrol after a while.
+    Enemies will stop moving and keep shooting you on sight with a cooldown, no matter they are patrolling or not.
+    Enemies only have 120 degrees of FoV, so it is safe to approach from the sides.
+    The player, the goal and enemies will be killed when hit by a bullet.
+    Bullets will disappear if they hit anything, including another bullet.
+    One random enemy will have a key (marked with a white circle). The gate will unlock when this enemy is killed.
+    
+What the player’s controls are:
+    WASD to move.
+    Hold down the left mouse button to aim.
+    Release to shoot. Player's cooldown is the same as enemies.
+    Scroll Wheel to scale the view.
+    ESC to reload the scene.
+
+How the player scores:
+    +100 When the enemy with the key is killed.
+    +300 When the goal is destroyed.
+    -10  When an enemy without a key is killed - To slightly encourage the stealthy playstyle.
+    -100 When the player is first seen by an enemy - The preliminary alarm system.
+    -1 For each second past, capped at -120 (2 minutes). This score will only be deducted when the player wins or loses.
+
+How the game ends:
+    You win when the goal is destroyed. The scene will pause until you hit ESC.
+    You lose when you are killed. The scene will pause until you hit ESC.
+
+    Best case: you only kill the key enemy (+100) without triggering alarms and destroy the target (+300) ASAP.
+        That will be close to 400 points.
+    Worst case: you kill all non-key enemies (-20), trigger the alarm (-100), and get killed by the key enemy after 2min (-120).
+        That will be -240 points.
+
+Sound cues: shooting, scoring, the alarm, and player dying.

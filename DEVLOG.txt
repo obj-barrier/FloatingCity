@@ -1,33 +1,96 @@
-2024.11.14
+Preliminary Design:
     Aesthetic Goals: A top-down infiltration game.
-        1. Challenge: Players are constantly in danger situations, worried about being spotted, shot at, alarms and death.
-        2. Discovery: Players gradually realise they can do fancy moves with time manipulation, weapons and the environment.
+        Challenge: Players are in dangerous situations, worried about being spotted, shot at, and killed.
+        Discovery: Players gradually realize they can do fancy moves with time manipulation, weapons and the environment.
     Signs of Success:
-        1. Players can easily take down a single enemy, but struggle with multiple enemies.
-        2. There are certain strong enemies that have to be avoided.
-        3. Being spotted has serious consequences.
-        4. There are always multiple solutions to a problem.
-        5. Players gradually find enemy movement patterns and feel tempted to challenge harder levels.
+        Players can easily take down a single enemy, but struggle with multiple enemies.
+        There are certain strong enemies that have to be avoided.
+        Being spotted has serious consequences.
+        There are always multiple solutions to a problem.
+        Players gradually find enemy movement patterns and feel tempted to challenge harder levels.
     Signs of Failure:
-        1. Players can kill multiple enemies at once without triggering the alarm.
-        2. Players can win easily even after triggering the alarm.
-        3. Players quickly learns all the techniques.
+        Players can kill multiple enemies at once without triggering the alarm.
+        Players can win easily even after triggering the alarm.
+        Players quickly learn all the techniques.
     Core Loop:
         Players enter a section, observe the enemies, make up a plan to the next section, bypassing or killing some of the enemies.
-        Players should spend most of the time pausing and thinking what to do next.
-
+        Players should spend most of the time pausing and thinking about what to do next.
     For homework 6 I will only make one level (section) as prototype.
 
+2024.11.14
     Making the map: Multiple rooms connected with corridors form a section.
         Used tilemap to layout the initial map with black ground and red walls.
         Set up tilemap colliders for the walls.
-        Used NaveMeshPlus to build walkable area in the map.
-
+        Used NavMeshPlus to build walkable area in the map.
     Making an enemy: A red triangle that can go wherever I choose.
         NavMeshAgent can make it move, but do not rotate it well in 2D.
         Manually set rotation to face new position every frame.
-    
     Decided to make 3 enemies as a group in one room. Periodically, random one of them is sent to patrol a random terminal.
     Made a list of 3 terminals represented by orange triangles. They are placed in the middle of a wall of rooms.
-    By "patrol", it means an enemy start from the spawn room and go to the terminal, stay there for x seconds, and return.
-    If it returns successfully, it will report to the group for next round of patrolling.
+    By "patrol", it means an enemy starts from the spawn room and go to the terminal, stay there for x seconds, and return.
+    If it returns successfully, it will report to the group for the next round of patrol.
+
+2024.11.15
+    Making the player: A green circle with a weapon pointing out, like a tank turret.
+        WASD to move.
+        Hold the left mouse button to aim, and release to shoot.
+        Used line renderer to draw aim indicator when aiming.
+    Making a bullet: A small yellow circle flying fast towards the aiming direction.
+        Bullets disappear when hitting anything - walls, enemies, other bullets...
+        Bullets kills enemies.
+        Discovered that bullets may fly too fast and teleport, so changed collision detection mode to continuous.
+        It did not work, maybe I need to also change collision detection mode for enemies, which is not ideal.
+        Instead, made colliders of bullets longer (to have a tail).
+        Bullets may collide with each other more easily, but deal with it later.
+    When enemies are killed, they need to notify the group controller to exempt them from patrolling. Will do it next time.
+
+2024.11.16
+    Implemented the removal from group when killed. Other enemies should go check him out after some time, maybe do it later.
+    Used Vector2.Angle and Physics2D.Raycast to decide whether an enemy can see the player.
+    (Angle is smaller than enemy's FoV and line of sight is not blocked.)
+    Made enemies shoot the player on sight.
+    Added enemy weapon cooldown.
+    Bullets still sometimes teleport through things, so I had to change collision detection methods for bullets to continuous.
+    Consolidated all "hit by bullet" events to BulletController, so that only the bullets need continuous collision detection.
+    Added player weapon cooldown. It is the same as enemies', so that players cannot just brute force through enemies.
+
+2024.11.17
+    Making the goal: A blue diamond.
+        The goal is destroyed when hit by a bullet, and the player wins the game.
+        The goal is locked behind a gate.
+    Made a random enemy in each group carry the key to the corresponding gate. The gate unlocks when that enemy is killed.
+    Making the scoring system:
+        +100 When an enemy with a key is killed.
+        +300 When the goal is destroyed.
+        -10  When an enemy without a key is killed - To slightly encourage the stealthy playstyle.
+        -100 When the player is first seen by an enemy - The preliminary alarm system.
+        -1 For each second passed, capped at -120 (2 minutes). This score will only be deducted when the player wins or loses.
+    Made a timer counting down from 120s to calculate the timer score.
+    Added sounds for shooting, scoring, the alarm and player dying.
+
+Postmortem:
+    What I originally set out to do:
+        A top-down infiltration game where you move through rooms carefully while avoiding / killing enemies and reach the goal.
+        Time manipulation and various gadgets are keys to your success.
+    What my goals ended up being:
+        You still move carefully while avoiding / killing enemies and reach the goal
+        But many desired features, like melee weapons, gunshot / alarm triggering idle enemies, are postponed due to time limit.
+        The "keys to your success" are also postponed, making the game harder overall.
+    What I accomplished of those goals:
+        The game still feels kind of like infiltration, and players are rewarded by being good at it.
+    What went right:
+        Players can easily take down a single enemy (if not seen), but struggle with multiple enemies.
+        Being spotted has (somewhat) serious consequences.
+        There are multiple solutions to the problem.
+        Players can gradually find enemy movement patterns and get higher scores.
+    What went wrong:
+        Players can win easily even after triggering the alarm, just with a lower score.
+        There are not enough techniques (mechanics) for players to learn.
+    What I wish I knew:
+        Unity's NavMesh system does not work well with 2D maps.
+        Time manipulation is a pain. Even pausing the game correctly is a pain.
+    What I learnt in the process:
+        Tilemap is an easy tool for designing 2D maps.
+        Destroying an object when killed is not always a good idea.
+        FindObjectOfType is convenient for unique objects like the ScoreKeeper and the Player.
+        This feels like a big project I can keep working on, but I will need help with assets.
